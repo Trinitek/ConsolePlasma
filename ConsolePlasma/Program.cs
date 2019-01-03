@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsolePlasma
@@ -8,20 +9,17 @@ namespace ConsolePlasma
     {
         public static async Task Main(string[] args)
         {
+            Console.CursorVisible = false;
+
             var frameSize = new Size();
             int tick = DateTime.Now.Millisecond;
 
-            while (true)
+            while (!Console.KeyAvailable)
             {
                 frameSize = Frame(frameSize, tick);
                 tick++;
 
                 await Task.Delay(100);
-
-                if (Console.KeyAvailable)
-                {
-                    break;
-                }
             }
         }
 
@@ -39,10 +37,18 @@ namespace ConsolePlasma
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.BackgroundColor = ConsoleColor.Black;
 
-            for (int y = 0; y < height - 1; y++)
+            var sb = new StringBuilder();
+
+            for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
+                    // Skip the very last character in the frame to prevent the console from scrolling.
+                    if (y == height - 1 && x == width - 1)
+                    {
+                        continue;
+                    }
+
                     tick = tick == 0 ? 1 : tick;
 
                     double a = x / (height / 16.0);
@@ -59,12 +65,11 @@ namespace ConsolePlasma
 
                     double intensity = (e + f + g) / 3.0;
 
-                    Console.Write(Character(intensity));
+                    sb.Append(Character(intensity));
                 }
             }
 
-            Console.ResetColor();
-            Console.Write("Press any key to exit");
+            Console.Write(sb.ToString());
 
             return new Size(width, height);
         }
