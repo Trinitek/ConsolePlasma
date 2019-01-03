@@ -21,6 +21,8 @@ namespace ConsolePlasma
 
                 await Task.Delay(100);
             }
+
+            Console.ResetColor();
         }
 
         private static Size Frame(Size oldSize, int tick)
