@@ -23,6 +23,7 @@ namespace ConsolePlasma
             }
 
             Console.ResetColor();
+            Console.CursorVisible = true;
         }
 
         private static Size Frame(Size oldSize, int tick)
